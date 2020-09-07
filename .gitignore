@@ -1,0 +1,6 @@
+django/db.sqlite3
+flask/db.sqlite3
+__pycache__
+.DS_Store
+flask/__pycache__
+flask/venv
