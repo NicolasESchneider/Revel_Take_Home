@@ -17,6 +17,8 @@ def list_vehicles():
 
 
 @vehicle_page.route('/swap/<int:id>', methods=['PATCH'])
+# move the swap logic onto the Vehicle model. it will be called here, and within the shift logic
+
 def swap_battery(id):
   target_vehicle = Vehicle.query.get(id)
   target_vehicle.battery_level = 100.0
