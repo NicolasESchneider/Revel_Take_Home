@@ -8,6 +8,7 @@ vehicle_data = [
         "model": "Niu",
         "location_lat": 40.680245,
         "location_long": -73.996955,
+        "shift_id": None,
     },
     {
         "id": 2,
@@ -17,6 +18,7 @@ vehicle_data = [
         "model": "Niu",
         "location_lat": 40.684978,
         "location_long": -73.998965,
+        "shift_id": None,
     },
     {
         "id": 3,
@@ -26,6 +28,7 @@ vehicle_data = [
         "model": "Niu",
         "location_lat": 40.683574,
         "location_long": -73.990715,
+        "shift_id": None,
     },
     {
         "id": 4,
@@ -35,6 +38,7 @@ vehicle_data = [
         "model": "Niu",
         "location_lat": 40.67942,
         "location_long": -73.983841,
+        "shift_id": None,
     },
     {
         "id": 5,
@@ -44,6 +48,7 @@ vehicle_data = [
         "model": "Niu",
         "location_lat": 40.676695,
         "location_long": -73.988838,
+        "shift_id": None,
     },
     {
         "id": 6,
@@ -53,6 +58,7 @@ vehicle_data = [
         "model": "Niu",
         "location_lat": 40.675496,
         "location_long": -73.99468,
+        "shift_id": None,
     },
     {
         "id": 7,
@@ -62,6 +68,7 @@ vehicle_data = [
         "model": "Niu",
         "location_lat": 40.678274,
         "location_long": -73.001642,
+        "shift_id": None,
     },
     {
         "id": 8,
@@ -71,6 +78,7 @@ vehicle_data = [
         "model": "Niu",
         "location_lat": 40.678434,
         "location_long": -73.997158,
+        "shift_id": None,
     },
     {
         "id": 9,
@@ -80,6 +88,7 @@ vehicle_data = [
         "model": "Niu",
         "location_lat": 40.683456,
         "location_long": -73.002047,
+        "shift_id": None,
     },
     {
         "id": 10,
@@ -89,6 +98,7 @@ vehicle_data = [
         "model": "Niu",
         "location_lat": 40.677941,
         "location_long": -73.982731,
+        "shift_id": None,
     },
     {
         "id": 11,
@@ -98,6 +108,7 @@ vehicle_data = [
         "model": "Niu",
         "location_lat": 40.673533,
         "location_long": -73.981992,
+        "shift_id": None,
     },
     {
         "id": 12,
@@ -107,6 +118,7 @@ vehicle_data = [
         "model": "Niu",
         "location_lat": 40.668346,
         "location_long": -73.976115,
+        "shift_id": None,
     },
     {
         "id": 13,
@@ -116,6 +128,7 @@ vehicle_data = [
         "model": "Niu",
         "location_lat": 40.669861,
         "location_long": -73.989846,
+        "shift_id": None,
     },
     {
         "id": 14,
@@ -125,6 +138,7 @@ vehicle_data = [
         "model": "Niu",
         "location_lat": 40.673568,
         "location_long": -73.000575,
+        "shift_id": None,
     },
     {
         "id": 15,
@@ -134,5 +148,6 @@ vehicle_data = [
         "model": "Niu",
         "location_lat": 40.676001,
         "location_long": -73.987382,
+        "shift_id": None,
     },
 ]
