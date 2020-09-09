@@ -10,7 +10,9 @@ class Vehicle(db.Model):
     location_lat = db.Column(db.Float, nullable=False)
     location_long = db.Column(db.Float, nullable=False)
     # my changes Below here
-    shift_id = db.Column(db.Integer, db.ForeignKey('shift.id'), nullable=True)
+    shift_id = db.Column(db.Integer, db.ForeignKey('shift.id'), nullable=True, default=None)
+    # point to next 
+    next_id = db.Column(db.Integer, db.ForeignKey('vehicle.id'), nullable=True, default=None)
     created_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
 
@@ -20,4 +22,4 @@ class VehicleSchema(ma.Schema):
         model = Vehicle
         fields = ("id", "license_place", "battery_level",
                   "in_use", "location_lat", "location_long",
-                  "shift_id", 'created_at', 'updated_at')
+                  "shift_id", 'next_id', 'created_at', 'updated_at')
