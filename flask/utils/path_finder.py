@@ -4,13 +4,12 @@ from models.vehicle import Vehicle
 
 class PathFinder():
 
-  def __init__(self, vehicles, starting_long, starting_lat):
-    self.distance_matrix = self.build_distance_matrix(vehicles, starting_lat, starting_long)
-    self.start_lat = starting_lat
-    self.start_long = starting_long
+  def __init__(self, vehicles, shift):
+    self.distance_matrix = self.build_distance_matrix(vehicles, shift)
     self.initial_route = self.nearest_neighbor_path(self.distance_matrix)
     ## calculate the inital_route using the nearest_neighbor search algorithm
     # O(n^2) time complexity
+    # space wise we need O(n^2) space complexity, where n is num vehicles for the distance matrix
     self.best_route = []
     self.best_distance = 0
     self.distances = []
@@ -21,9 +20,9 @@ class PathFinder():
     self.best_route = new_route
     return self.best_distance, self.best_route
 
-  def build_distance_matrix(self, vehicles, starting_long, starting_lat):
+  def build_distance_matrix(self, vehicles, shift):
     # Build out a matrix of points containing the distance between 2 points in km
-    all_points = [Vehicle(location_lat=starting_lat, location_long=starting_long)] + vehicles
+    all_points = [shift] + vehicles
     num_points = len(all_points)
     distance_matrix = np.zeros((num_points, num_points))
     for point_a in all_points:

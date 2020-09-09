@@ -57,7 +57,7 @@ def automatic_shift_creation(latitude, longitude):
       shift_id = new_shift.id,
       created_at = v.created_at,
     ))
-  path = PathFinder(vehicles, longitude, latitude)
+  path = PathFinder(vehicles, new_shift)
   # pathing logic for vehicles goes HERE
   # then iterate through the newly sorted/pathed vehicles
   if len(vehicles) > 0:
