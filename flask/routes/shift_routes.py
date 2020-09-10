@@ -54,7 +54,7 @@ def is_complete(id):
     res['shift_complete'] = True
   return res
 
-@shift_page.route('shifts/<int:id>/check_v/<int:vehicle_id>', methods=['GET'])
+@shift_page.route('/shifts/<int:id>/check_v/<int:vehicle_id>', methods=['GET'])
 def check_vehicle_swapped(id, vehicle_id):
   res = { 'swap_completed': True }
   target_shift = Shift.query.get(id)
