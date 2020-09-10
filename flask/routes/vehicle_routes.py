@@ -24,9 +24,10 @@ def swap_battery(id):
   db.session.commit()
   return VehicleSchema().dump(target_vehicle)
 
-@vehicle_page.route('/add_to_shift/<int:id>/<int:shift_id>', methods=['PATCH'])
+@vehicle_page.route('/vehicles/<int:id>/shift/<int:shift_id>', methods=['PATCH'])
 def add_to_shift(id, shift_id):
   target_vehicle = Vehicle.query.get(id)
   target_vehicle.shift_id = shift_id
+  
   db.session.commit()
   return VehicleSchema().dump(target_vehicle)

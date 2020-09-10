@@ -10,10 +10,9 @@ class PathFinder():
     ## calculate the inital_route using the nearest_neighbor search algorithm
     # O(n^2) time complexity
     # space wise we need O(n^2) space complexity, where n is num vehicles for the distance matrix
-    self.best_route = []
+    self.best_route = self.initial_route
     self.best_distance = 0
     self.distances = []
-    print(self.initial_route)
 
   def update(self, new_route, new_distance):
     self.best_distance = new_distance
@@ -23,6 +22,7 @@ class PathFinder():
   def build_distance_matrix(self, vehicles, shift):
     # Build out a matrix of points containing the distance between 2 points in km
     all_points = [shift] + vehicles
+    # the shift should always our initial point
     num_points = len(all_points)
     distance_matrix = np.zeros((num_points, num_points))
     for point_a in all_points:
@@ -108,6 +108,15 @@ class PathFinder():
         i += 1
       new_path.append(next_distance_index)
     return new_path
-      
+
+  def swap(self, path, swap_first, swap_last):
+    path_updated = np.concatenate(
+      (
+        path[0:swap_first],
+        path[swap_last:-len(path) + swap_first - 1:-1],
+        path[swap_last + 1:len(path)]
+      )
+    )
+    return path_updated.tolist()
 
 

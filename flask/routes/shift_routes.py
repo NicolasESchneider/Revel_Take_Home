@@ -10,18 +10,49 @@ from utils.path_finder import PathFinder
 
 shift_page = Blueprint('shift_page', __name__)
 
-@shift_page.route('/shifts/<int:id>', methods=['GET'])
-def show_shift(id):
-  target_shift = Shift.query.get(id)
-  vehicles = target_shift.vehicles
-  return ShiftSchema().dump(target_shift)
-  
 @shift_page.route('/shifts', methods=['GET'])
 def list_shifts():
   shifts_schema = ShiftSchema(many=True)
   shifts = Shift.query.all()
   return shifts_schema.dumps(shifts)
 
+@shift_page.route('/shifts', methods=['POST','PUT'])
+def create_shift():
+  new_shift = Shift()
+  db.session.add(new_shift)
+  db.session.commit()
+  return ShiftSchema().dump(new_shift)
+
+
+@shift_page.route('/shifts/<int:id>', methods=['GET'])
+# view a shift/all vehicles in a shift
+def show_shift(id):
+  target_shift = Shift.query.get(id)
+  return ShiftSchema().dump(target_shift)
+  
+
+@shift_page.route('/shifts/<int:id>/continue', methods=['PATCH'])
+def perform_swap():
+  target_shift = Shift.query.get(id)
+  link = target_shift.link
+  current_vehicle = Vehicle.query.get(link.next_vehicle_id)
+
+  link.next_vehicle_id = current_vehicle.next_id
+  current_vehicle.battery_level = 100.0
+
+  db.session.commit()
+  return
+
+
+@shift_page.route('/shifts/<int:id>/complete', methods=['GET'])
+def is_complete(id):
+  res = { 'shift_complete?': False }
+  target_shift = Shift.query.get(id)
+  link = target_shift.link
+  if link.next_vehicle_id == None:
+    res['shift_complete?'] = True
+  return res
+    
 @shift_page.route('/auto_shift/<int:latitude>/<int:longitude>', methods=['POST','PUT', 'GET'])
 # only have get methods here for easy testing,
 def automatic_shift_creation(latitude, longitude):
@@ -57,33 +88,28 @@ def automatic_shift_creation(latitude, longitude):
       shift_id = new_shift.id,
       created_at = v.created_at,
     ))
-  path = PathFinder(vehicles, new_shift)
+
+  path = PathFinder(vehicles, new_shift).initial_route[1:len(vehicles) + 1]
   # pathing logic for vehicles goes HERE
+  # currently employing nearest neighbor heuristic, need to hook up the Two_opt solution for further accuracy
   # then iterate through the newly sorted/pathed vehicles
-  if len(vehicles) > 0:
-    for i in range(0, len(vehicles)):
+  if len(path) > 0:
+    for i in range(0, len(path)):
       # set the Vehicle.next_id to be the next vehicle
-      if i < len(vehicles) - 1:
-        db.session.query(Vehicle).filter(Vehicle.id == vehicles[i].id).update({
-          'next_id': vehicles[i + 1].id,
+      current_vehicle_index = path[i] - 1
+      if i < len(path) - 1:
+        db.session.query(Vehicle).filter(Vehicle.id == vehicles[current_vehicle_index].id).update({
+          'next_id': vehicles[path[i + 1] - 1].id,
           'shift_id': new_shift.id
         })
       else:
-        db.session.query(Vehicle).filter(Vehicle.id == vehicles[i].id).update({
+        db.session.query(Vehicle).filter(Vehicle.id == vehicles[current_vehicle_index].id).update({
           'shift_id': new_shift.id
         })
     # create the shift_index row
-    new_link = ShiftIndex(shift_id = new_shift.id, next_vehicle_id=vehicles[0].id)
+    new_link = ShiftIndex(shift_id = new_shift.id, next_vehicle_id=vehicles[path[0]].id)
     db.session.add(new_link)
 
-  # commit all changes
-  db.session.commit()
-  return ShiftSchema().dump(new_shift)
-
-
-@shift_page.route('/shifts', methods=['POST','PUT'])
-def create_shift():
-  new_shift = Shift()
-  db.session.add(new_shift)
+  # # commit all changes
   db.session.commit()
   return ShiftSchema().dump(new_shift)

@@ -1,7 +1,7 @@
 from datetime import datetime
+from marshmallow import Schema, fields
 from db import db
 from models.vehicle import VehicleSchema
-from marshmallow import Schema, fields
 
 
 class Shift(db.Model):
