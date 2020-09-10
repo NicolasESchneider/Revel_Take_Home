@@ -14,9 +14,9 @@ You have been provided a repository that contains a Django, Flask, or Rails appl
     - add vehicles to shifts ~ basic Done
     - review all vehicles in a shift ~ basic Done
     - complete a battery swap for a vehicle ~ basic Done
-    - check if a swap has been completed for any vehicle in a shift ~ shiftId not null and battery is at 100
+    - check if a swap has been completed for any vehicle in a shift ~ iterate through linked list check for vehicle ID
     - query shift to see if all vehicles in the shift have had their battery swaps
-        - grab all vehicles with a given shift_id, do all have battery level 100
+        - grab shift_index, is next_vehicle_id == none
     Design and implement the database and api for the above
 
 2. Implement automatic shift creation. Automatic shift creation should take a lat long that it uses as a start point.  Your vehicle selection should select the 20 closest vehicles to that point.  The vehicles should be in the order that they should be visited to reduce the amount of distance traveled. e.g. the first vehicle in the list should be the first vehicle that should be visited the second the second and so on. Please use euclidian distance vs drive distance for simplicity.
@@ -30,10 +30,10 @@ second step is implementing the travelling salesman algorithm to path/order the 
 
     -nearest neighbor heuristic can work maybe? in practice most vehicles will be in relatively close clusters, as I assume they will be docked together. this brings time down to O(n^2)
     - build out nearest neighbor, to start
-    - use 2 opt to greedily optimize it a bit. but based on the 
+    - use 2 opt to greedily optimize it a bit.
+
 ## in order to store order, implement a linked list within the database.
     - Vehicles when added to a shift, will be stamped with a shift ID
-    - shift.target_vehicle_id is a foreign key that points to the next vehicle to be visited.
     - Once the path has been determined, update each vehicle row to have a next_id that points to the next vehicle in the path.
         - this solves the issue of adding vehicles to a shift in progress,
         - adding only one vehicle now will only require updating two rows. the vehicle being added in question (shift_id, next_id) and the vehicle that would be before the new vehicle in the path. (next_id). We also can easily when updating a path mid shift,
