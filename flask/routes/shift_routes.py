@@ -29,7 +29,8 @@ def create_shift():
 def show_shift(id):
   target_shift = Shift.query.get(id)
   return ShiftSchema().dump(target_shift)
-  
+
+
 
 @shift_page.route('/shifts/<int:id>/continue', methods=['PATCH'])
 def perform_swap():
@@ -46,14 +47,43 @@ def perform_swap():
 
 @shift_page.route('/shifts/<int:id>/complete', methods=['GET'])
 def is_complete(id):
-  res = { 'shift_complete?': False }
+  res = { 'shift_complete': False }
   target_shift = Shift.query.get(id)
   link = target_shift.link
   if link.next_vehicle_id == None:
-    res['shift_complete?'] = True
+    res['shift_complete'] = True
   return res
+
+@shift_page.route('shifts/<int:id>/check_v/<int:vehicle_id>', methods=['GET'])
+def check_vehicle_swapped(id, vehicle_id):
+  res = { 'swap_completed': True }
+  target_shift = Shift.query.get(id)
+
+  link = target_shift.link
+  vehicles = target_shift.vehicles;
+
+  vehicles_by_id = {}
+
+  for v in vehicles:
+    vehicles_by_id[v.id] = v
+
+  if vehicle_id not in vehicles_by_id:
+    # this vehicle is not in this shift
+    abort(404)
+
+  next_v = vehicles_by_id[link.next_vehicle_id]
+  while next_v != None:
+    if next_v.id == vehicle_id:
+      res['swap_completed'] = False
+      break
+    next_v = vehicles_by_id[next_v.next_id]
+
+  return res
+  
+  
+
     
-@shift_page.route('/auto_shift/<int:latitude>/<int:longitude>', methods=['POST','PUT', 'GET'])
+@shift_page.route('/auto_shift/<int:latitude>/<int:longitude>', methods=['POST','PUT'])
 # only have get methods here for easy testing,
 def automatic_shift_creation(latitude, longitude):
   # create the new shift
@@ -93,6 +123,8 @@ def automatic_shift_creation(latitude, longitude):
   # pathing logic for vehicles goes HERE
   # currently employing nearest neighbor heuristic, need to hook up the Two_opt solution for further accuracy
   # then iterate through the newly sorted/pathed vehicles
+
+  # not enough time to implement two_opt confidently. Will do further research and go over during onsite, currently just using Nearest Neighbor
   if len(path) > 0:
     for i in range(0, len(path)):
       # set the Vehicle.next_id to be the next vehicle
